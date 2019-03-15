@@ -7,10 +7,17 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Modal from './dialogcomp'
+
+import './industries.css'
 const CustomTableCell = withStyles(theme => ({
     head: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: theme.palette.common.blue,
         color: theme.palette.common.white,
+
         fontSize: 18
     },
     body: {
@@ -23,7 +30,11 @@ export class Industries extends Component
     constructor(props)
     {
         super(props);
-        this.state = {customers: []};
+        this.state = {
+            customers: [],
+            show:false,
+            customer:{}
+        };
     }
 
     componentDidMount()
@@ -38,6 +49,21 @@ export class Industries extends Component
             })
     }
 
+
+    showDialog=(customer)=> {
+        console.log(customer);
+        this.setState({ show: true });
+        if(customer!=null)
+        {
+            this.setState({ customer: customer });
+
+        }
+    }
+    closeDialog=()=> {
+        //console.log(user);
+        this.setState({ show: false });
+
+    }
     tabRow(){
         return this.state.customers.map(function(object, i){
             return <TableRow obj={object} key={i} />;
@@ -47,8 +73,13 @@ export class Industries extends Component
 
         console.log(this.state.customers);
         return(
+
+
             <div>
                 <h3 align="center">Customers List</h3>
+
+                <Modal show={this.state.show} hide={this.closeDialog} customerInfo={this.state.customer} />
+
                {/* <table className="table table-striped" style={{ marginTop: 20 }}>
                     <thead>
                     <tr>
@@ -66,7 +97,7 @@ export class Industries extends Component
                 </table>*/}
 
                 <Table >
-                    <TableHead >
+                    <TableHead className="TableHead">
                         <TableRow >
                             <CustomTableCell>
                                 Name
@@ -83,12 +114,18 @@ export class Industries extends Component
                             <CustomTableCell>
                                 DOB
                             </CustomTableCell>
+                            <CustomTableCell>
+                                Edit
+                            </CustomTableCell>
+                            <CustomTableCell>
+                                Delete
+                            </CustomTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             this.state.customers.map(customer=>(
-                                <TableRow key={customer.customerId} >
+                                <TableRow key={customer.customerId} className="Table">
                                     <CustomTableCell>
                                         {customer.name}
                                     </CustomTableCell>
@@ -104,11 +141,16 @@ export class Industries extends Component
                                     <CustomTableCell>
                                         {customer.dob}
                                     </CustomTableCell>
-                                   {/* <CustomTableCell>
-                                        <Button onClick={()=>{this.showDialog(user)}}>
+                                    <CustomTableCell>
+                                        <Button onClick={()=>{this.showDialog(customer)}}>
                                             <EditIcon/>
                                         </Button>
-                                    </CustomTableCell>*/}
+                                    </CustomTableCell>
+                                    <CustomTableCell>
+                                        <Button>
+                                            <DeleteIcon/>
+                                        </Button>
+                                    </CustomTableCell>
                                 </TableRow>
                             ))
                         }
