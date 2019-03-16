@@ -40,7 +40,7 @@ export class Industries extends Component
     componentDidMount()
     {
 
-        axios.get('https://rpscustomer-cf.cfapps.io/getcustomers')
+        axios.get('https://customer-cf.cfapps.io/getcustomers')
             .then(response => {
                 this.setState({ customers: response.data });
             })
@@ -68,6 +68,11 @@ export class Industries extends Component
         return this.state.customers.map(function(object, i){
             return <TableRow obj={object} key={i} />;
         });
+    }
+    delete(obj) {
+        axios.get('https://customer-cf.cfapps.io/deletecustomerbyid/'+obj.customerId)
+            .then(console.log('Deleted'))
+            .catch(err => console.log(err))
     }
     render(){
 
@@ -147,7 +152,7 @@ export class Industries extends Component
                                         </Button>
                                     </CustomTableCell>
                                     <CustomTableCell>
-                                        <Button>
+                                        <Button onClick={()=>{this.delete(customer)}}>
                                             <DeleteIcon/>
                                         </Button>
                                     </CustomTableCell>
